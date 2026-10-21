@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Food Recognition & Nutrition</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box}
+
+/* 🌙 DARK MODE (DEFAULT) */
+body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    min-height:100vh;
+    color:#fff;
+    transition:0.4s;
+}
+
+/* ☀️ LIGHT MODE */
+body.light{
+    background:linear-gradient(135deg,#fdfbfb,#ebedee);
+    color:#222;
+}
+
+body.light .container,
+body.light .result,
+body.light .card{
+    background:rgba(255,255,255,0.9);
+    color:#222;
+}
+
+body.light h1,
+body.light h2,
+body.light .card h3{
+    color:#00796b;
+}
+
+body.light .highlight{
+    background:linear-gradient(135deg,#ffb74d,#ff9800);
+}
+
+.container{
+    width:85%;
+    max-width:1100px;
+    margin:40px auto;
+    padding:40px;
+    border-radius:20px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(15px);
+    box-shadow:0 20px 40px rgba(0,0,0,0.4);
+}
+
+h1{
+    text-align:center;
+    font-size:36px;
+    color:#00ffb3;
+    margin-bottom:30px;
+}
+
+form{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+input[type="file"]{
+    padding:12px;
+    border-radius:12px;
+    border:none;
+    width:60%;
+}
+
+button{
+    margin-top:15px;
+    padding:14px 40px;
+    border:none;
+    border-radius:50px;
+    font-size:18px;
+    font-weight:600;
+    background:linear-gradient(135deg,#00e676,#1de9b6);
+    cursor:pointer;
+}
+
+.result{
+    margin-top:40px;
+    padding:30px;
+    border-radius:20px;
+    background:rgba(0,0,0,0.55);
+}
+
+.food-header{
+    display:flex;
+    align-items:center;
+    gap:30px;
+    flex-wrap:wrap;
+}
+
+.food-header img{
+    width:260px;
+    border-radius:20px;
+    border:4px solid #00ffb3;
+}
+
+.food-header h2{
+    font-size:30px;
+    color:#7CFC00;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+    margin-top:25px;
+}
+
+.card{
+    background:rgba(255,255,255,0.08);
+    padding:20px;
+    border-radius:16px;
+}
+
+.card h3{
+    color:#00ffb3;
+}
+
+/* ✅ LINE BY LINE VITAMINS */
+.vitamin-list{
+    list-style:none;
+    padding-left:0;
+}
+
+.vitamin-list li{
+    background:rgba(0,255,180,0.15);
+    margin-bottom:8px;
+    padding:8px 14px;
+    border-radius:12px;
+    font-weight:600;
+}
+
+.highlight{
+    margin-top:20px;
+    padding:18px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#ff9800,#ff5722);
+    text-align:center;
+}
+
+/* 🔁 TOGGLE BUTTON */
+.toggle{
+    position:fixed;
+    top:20px;
+    right:20px;
+    background:#00ffb3;
+    color:#003300;
+    padding:10px 16px;
+    border-radius:30px;
+    font-size:18px;
+    cursor:pointer;
+    z-index:1000;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🌙 / ☀️ TOGGLE -->
+<div class="toggle" onclick="toggleMode()">🌙 / ☀️</div>
+
+<div class="container">
+
+<h1>🍽 Food Recognition & Nutrition Analysis</h1>
+
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="image" required>
+    <br>
+    <button type="submit">Analyze Food</button>
+</form>
+
+{% if predicted_class %}
+<div class="result">
+
+<div class="food-header">
+    <img src="{{ image_path }}">
+    <h2>{{ predicted_class | capitalize }}</h2>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h3>🔥 Nutrition Facts</h3>
+<p>Calories: {{ nutrition.get('Calories') }}</p>
+<p>Protein: {{ nutrition.get('Protein') }}</p>
+<p>Carbs: {{ nutrition.get('Carbs') }}</p>
+<p>Fat: {{ nutrition.get('Fat') }}</p>
+</div>
+
+<div class="card">
+<h3>🧪 Minerals</h3>
+<p>Iron: {{ nutrition.get('Iron') }}</p>
+<p>Calcium: {{ nutrition.get('Calcium') }}</p>
+<p>Magnesium: {{ nutrition.get('Magnesium') }}</p>
+<p>Potassium: {{ nutrition.get('Potassium') }}</p>
+</div>
+
+<div class="card">
+<h3>💊 Vitamins</h3>
+<ul class="vitamin-list">
+{% for v in nutrition.get('Vitamins',[]) %}
+<li>{{ v }}</li>
+{% endfor %}
+</ul>
+</div>
+
+<div class="card">
+<h3>⏰ Best Time</h3>
+<p>{{ nutrition.get('Best_Time') }}</p>
+</div>
+
+<div class="card">
+<h3>💪 Good For</h3>
+<ul>
+{% for g in nutrition.get('Good_For',[]) %}
+<li>{{ g }}</li>
+{% endfor %}
+</ul>
+</div>
+
+<div class="card">
+<h3>🩺 Helps Reduce</h3>
+<ul>
+{% for d in nutrition.get('Helps_Reduce',[]) %}
+<li>{{ d }}</li>
+{% endfor %}
+</ul>
+</div>
+
+<div class="card">
+<h3>⚠️ Disadvantages</h3>
+<ul>
+{% for d in nutrition.get('Disadvantages',[]) %}
+<li>{{ d }}</li>
+{% endfor %}
+</ul>
+</div>
+
+<div class="card">
+<h3>🚫 Avoid</h3>
+<p>{{ nutrition.get('Avoid') }}</p>
+</div>
+
+</div>
+
+<div class="highlight">
+💡 Health Tip: {{ nutrition.get('Suggestion') }}
+</div>
+
+</div>
+{% endif %}
+
+</div>
+
+<!-- 🧠 TOGGLE SCRIPT -->
+<script>
+function toggleMode(){
+    document.body.classList.toggle("light");
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:"Poppins",sans-serif;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    transition:0.4s;
+}
+
+/* Overlay */
+.overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.55);
+    backdrop-filter:blur(3px);
+}
+
+/* Glass Card */
+.container{
+    position:relative;
+    z-index:10;
+    width:380px;
+    padding:40px;
+    border-radius:18px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.25);
+    backdrop-filter:blur(10px);
+    text-align:center;
+    color:#fff;
+    box-shadow:0 8px 25px rgba(0,0,0,0.4);
+    animation:fadeUp 1.1s ease-in-out;
+}
+
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(25px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+h1{
+    font-size:32px;
+    margin-bottom:25px;
+    color:#00ffd2;
+    font-weight:600;
+}
+
+/* Inputs */
+input{
+    width:100%;
+    padding:14px;
+    margin:12px 0;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+}
+
+input[type="submit"]{
+    margin-top:18px;
+    background:linear-gradient(135deg,#00e6a8,#1de9d4);
+    border-radius:50px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+a{
+    display:block;
+    margin-top:20px;
+    color:#00ffe1;
+    text-decoration:none;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body style="background:url('{{ url_for('static', filename='inp1.png') }}') no-repeat center/cover;">
+
+<div class="overlay"></div>
+
+<div class="container">
+    <h1>Create Account</h1>
+
+    <form method="post">
+        <input type="text" name="username" placeholder="Enter Username" required>
+        <input type="password" name="password" placeholder="Enter Password" required>
+        <input type="submit" value="Sign Up">
+    </form>
+
+    <a href="/signin">Already have an account? Sign In</a>
+</div>
+
+</body>
+</html>
