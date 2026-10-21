@@ -27,7 +27,7 @@ FoodSynthNet is a web-based food recognition and nutrition monitoring project. I
 - Frontend: HTML and CSS
 
 **Food Categories**
-Example categories may include:
+Example categories include:
 - Biryani
 - Chapati
 - Corn
